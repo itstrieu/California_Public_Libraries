@@ -1,0 +1,56 @@
+
+### STAT 692: California Public Libraries
+# Combine Data Files
+
+
+```{r}
+rm(list = ls()); gc()
+
+pacman::p_load(tidyverse)
+```
+
+```{r getFileNames, cache = TRUE, cache.extra = file.info('./databases')}
+paths = dir("data/raw/",pattern="All-",full.names=TRUE)
+names(paths) = basename(paths)
+```
+
+```{r createDataSet, cache = TRUE, dependson = 'getFileNames'}
+dfList = lapply(paths,read.csv)
+df     = do.call(plyr::rbind.fill,dfList)
+```
+
+```{r fixColumnNames_saveDataset}
+names(df) = names(df) %>% 
+  str_replace_all(c("X."="Num",
+                    "[.]"=""))
+```
+
+```{r NAmanagement}
+df = df %>%
+  unite("NumofElectronicBooks",c("NumofElectronicBooks","NumofElectronicBooksinCollection","TotalElectronicBooks")
+        ,na.rm=TRUE,sep="/",remove=TRUE) %>%
+  unite("NumofElectronicCollections", c("NumofElectronicCollections","NumofElectronicCollectionsinCollection")
+        ,na.rm=TRUE,sep="/",remove=TRUE) %>%
+  unite("NumofChildrensPrograms", c("NumofChildrensPrograms","NumofChildrensProgramscalculated","ofChildrensProgramscalculated")
+        ,na.rm=TRUE,sep="/",remove=TRUE) %>%
+  unite("TotalProgramAttendance", c("TotalProgramAttendance", "ProgramAttendance")
+        ,na.rm=TRUE,sep="/",remove=TRUE) %>%
+  unite("NumofOutlets", c("NumofOutlets","TotalofOutlets")
+        ,na.rm=TRUE,sep="/",remove=TRUE)
+
+df = df %>%
+  unite("NumofPhysicalAudioMaterials", c("NumofPhysicalAudioMaterials","NumofPhysicalAudioMaterialsinCollection")
+        ,na.rm=TRUE,sep="/",remove=TRUE) %>%
+  unite("NumofPhysicalVideoMaterials", c("NumofPhysicalVideoMaterials","NumofPhysicalVideoMaterialsinCollection")
+        ,na.rm=TRUE,sep="/",remove=TRUE) %>%
+  unite("NumofDownloadableAudioMaterials", c("NumofDownloadableAudioMaterials","NumofDownloadableAudioMaterialsinCollection")
+        ,na.rm=TRUE,sep="/",remove=TRUE) %>%
+    unite("NumofDownloadableVideoMaterials", c("NumofDownloadableVideoMaterials","NumofDownloadableVideoMaterialsinCollection")
+          ,na.rm=TRUE,sep="/",remove=TRUE) %>%
+  unite("Doyouchargelatefines", c("Doyouchargelatefines","Doyouchargeanypatronslatefinesforphysicalmaterials")
+        ,na.rm=TRUE,sep="/",remove=TRUE)
+
+naCountAfter = sort(colSums(is.na(df))) %>% as.data.frame(.)
+```
+
+
