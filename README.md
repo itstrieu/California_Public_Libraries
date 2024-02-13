@@ -1,6 +1,12 @@
 # Analysis of California Public Libraries
 
-This repository contains the following markdown files:
+This repository contains the following... 
+
+Presentation Files: 
+1. [Project Report](https://github.com/itstrieu/R_Projects/blob/main/California_Public_Libraries/Project%20Report.pdf)
+2. [Presentation Slides](https://github.com/itstrieu/R_Projects/blob/main/California_Public_Libraries/Presentation%20Slides.pdf)
+
+Markdown Files:
 
 1. [Combine Data Files](https://github.com/itstrieu/R_Projects/blob/main/California_Public_Libraries/00_CPL_Combine_Data_Files.md) - CPL uploads a different file for every year. They needed to be combined.
 2. [Data Pre-Processing](https://github.com/itstrieu/R_Projects/blob/main/California_Public_Libraries/01_CPL_Data_PreProcessing.md) - Description of file 2.
