@@ -1,13 +1,20 @@
+---
+title: "Random Forests Model"
+subtitle: "STAT 692: California Public Libraries"
+author: "Kathy Trieu"
+date: "12/2023"
+output: github_document
+---
 
-### STAT 692: California Public Libraries
-# Random Forests Model
-
+### R Setup
 
 ```{r}
 rm(list = ls()); gc()
 
 pacman::p_load(tidyverse,doParallel,caret,randomForest,wesanderson,pdp)
 ```
+
+### Load Data
 
 ```{r loadData}
 df = read.csv('data/CPL_Ready_For_Model.csv')
@@ -22,6 +29,7 @@ df = df %>%
   select(Year, everything())
 ```
 
+### Fit Model
 
 ```{r randomForestModel}
 set.seed(123) 
@@ -45,6 +53,8 @@ rfModel = readRDS(file="Output/rfModel.rda")
 predictions = predict(rfModel, newdata = testData)
 ```
 
+### Model Results
+
 ```{r modelResults}
 threeColors = wes_palette("Darjeeling1", 3, type = "discrete")
 oneColor    = wes_palette("Darjeeling1", 1, type = "discrete")
@@ -55,11 +65,18 @@ rmse_test     = sqrt(mse_test)
 mae_test      = mean(abs(predictions - testData$y))
 rsquared_test = 1 - mse_test / var(testData$y)
 
+```
+
+```{r, echo=FALSE}
 cat("Test Set Metrics:\n")
 cat(paste("Mean Squared Error (MSE): ", mse_test, "\n"))
 cat(paste("Root Mean Squared Error (RMSE): ", rmse_test, "\n"))
 cat(paste("Mean Absolute Error (MAE): ", mae_test, "\n"))
 cat(paste("R-squared: ", rsquared_test, "\n"))
+
+```
+
+```{r}
 
 rfPredictions = data.frame(Actual = testData$y, Predicted = predictions)
 
@@ -73,6 +90,7 @@ ggplot(rfPredictions, aes(x = Actual, y = Predicted)) +
 
 ```
 
+### Variable Importance
 
 ```{r varImportance}
 importance       = varImp(rfModel)$importance %>% arrange(desc(Overall)) %>% head(20)
@@ -89,6 +107,7 @@ ggplot(data = data.frame(Variable = varNames, Importance = importanceScores),
 
 ```
 
+### Partial Plots
 
 ```{r partialPlots}
 partialPlot = partial(rfModel, pred.var = "ReferenceQuestions")
@@ -101,7 +120,9 @@ partialPlot = partial(rfModel, pred.var = "AdultProgramAttendance")
 plot(partialPlot, main = "Partial Dependence Plot: Adult Program Attendance")
 ```
 
-```{r residuals}
+### Residual Plots
+
+```{r residuals, message=FALSE}
 rfPredictions['residuals'] = (testData$y - predictions) / sd(predictions)
 
 ggplot(rfPredictions) +

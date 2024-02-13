@@ -1,7 +1,12 @@
+---
+title: "Feature Selection"
+subtitle: "STAT 692: California Public Libraries"
+author: "Kathy Trieu"
+date: "12/2023"
+output: github_document
+---
 
-### STAT 692: California Public Libraries
-# Feature Selection
-
+### R Setup
 
 ```{r}
 rm(list = ls()); gc()
@@ -9,6 +14,8 @@ rm(list = ls()); gc()
 pacman::p_load(tidyverse,wesanderson)
 
 ```
+
+### Load and Organize Data
 
 ```{r loadData}
 df = read.csv('data/CPL_Cleaned_Data.csv')
@@ -26,12 +33,22 @@ df = df %>%
 dataUnreliable = c("SANJUANBAUTISTACITYLIBRARY","ALPINECOUNTYLIBRARY/ARCHIVES",
                    "VERNONPUBLICLIBRARY","TEHAMACOUNTYLIBRARY")
 
+
+
+```
+
+
+### Remove Unreliable Data
+#### I manually checked for values that did not make sense and removed rows that included primarily unreliable data.
+
+```{r}
 df = df %>%
   filter(!(Location %in% dataUnreliable)) %>%
   filter(!(Location == "SOUTHSANFRANCISCOPUBLICLIBRARY" & Year == "20-21")) %>%
   filter(!(Location == "COLTONPUBLICLIBRARY" & Year == "19-20"))
 ```
 
+### Standardize Features
 
 ```{r featuresEngineering}
 df = df %>%
@@ -61,11 +78,15 @@ df = df %>%
   mutate(across(-all_of(leaveAloneVars),.fns=~./PopulationofTheLegalServiceArea))
 ```
 
+### Check Skewness
+
 ```{r Skewness}
 skewnessVec = df %>%
   select(-Location, -Year) %>%
   sapply(., e1071::skewness, na.rm=TRUE)
 ```
+
+### Perform Cluster Analysis
 
 ```{r clusterAnalysis}
 threeColors = wes_palette("Darjeeling1", 3, type = "discrete")
@@ -99,17 +120,20 @@ factoextra::fviz_cluster(km.out, data = df[,-c(1,2)],
            scale_color_manual(values = wes_palette("Darjeeling1", 2, type = "discrete"))
 ```
 
+### Used Cluster Analysis Information to Split Data Meaningfully
+#### Cluster analysis revealed two distinct clusters: one large cluster of small to large libraries and one cluster of extra large libraries. All data from libraries serving extra large communities were removed using Outlier criteria.
 
 ```{r EDAdataFrames, warning=FALSE}
 df$cluster = km.out$cluster
 findOutlier = function(x) {
   return(x < quantile(x, .25) - 1.5*IQR(x) | x > quantile(x, .75) + 1.5*IQR(x))
 }
-df1 = df %>%
-  filter(cluster == 1)
 
-df2 = df %>% 
-  filter(cluster == 2)
+```
+
+### Created new dataframes to simplify Exploratory Data Analysis (EDA)
+
+```{r, warning=FALSE, message=FALSE}
 
 dfnoOutliers = df %>%
   filter(!findOutlier(df$PopulationofTheLegalServiceArea)==TRUE) %>%
@@ -166,6 +190,8 @@ totalProgramAttendance_R = dfRatesWithClassifier %>%
   group_by(Year, Neighborhood) %>%
   summarise(TotalProgramAttendance = sum(TotalProgramAttendance)) 
 ```
+
+### Data Visualizations
 
 ```{r EDAplots}
 ggplot(dfNotRatesWithClassifier, aes(LibraryVisits/1000000, fill=Neighborhood,color=Neighborhood)) +
@@ -281,6 +307,7 @@ ggplot(dfRatesWithClassifier.LV %>% filter(Neighborhood == "Large")) +
 
 ```
 
+#### More Data Visualizations, in the form of Box Plots
 
 ```{r moreBoxPlots}
 ggplot(dfRatesWithClassifier.LV %>% filter(Neighborhood == "Small")) +
@@ -389,6 +416,7 @@ ggplot(ProgramAttendancePerProgram %>% filter(AgeGroup == "Children")) +
 
 ```
 
+### Remove highly correlated features and save data
 
 ```{r corrAndSaveData}
 y = dfnoOutliers$LibraryVisits

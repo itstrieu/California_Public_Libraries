@@ -1,13 +1,20 @@
+---
+title: "Support Vector Machine Regression"
+subtitle: "STAT 692: California Public Libraries"
+author: "Kathy Trieu"
+date: "Fall 2023"
+output: github_document
+---
 
-### STAT 692: California Public Libraries
-# Support Vector Machine Regression
-
+### R Setup
 
 ```{r}
 rm(list = ls()); gc()
 
 pacman::p_load(tidyverse,doParallel,caret,randomForest,wesanderson,pdp,glmnet)
 ```
+
+### Load Data
 
 ```{r loadData}
 df = read.csv('data/CPL_Ready_For_Model.csv')
@@ -24,6 +31,8 @@ df = df %>%
   select(Year, everything())
 
 ```
+
+### Split Data
 
 ```{r dataSplitting}
 features   = df[, -which(names(df) == "y")]
@@ -45,6 +54,7 @@ Ytrain        = supervisor[train_indices]
 Ytest         = supervisor[-train_indices]
 ```
 
+### Fit Model
 
 ```{r loadModels}
 library(doParallel)
@@ -63,6 +73,7 @@ svmOut = readRDS("Output/svmModel.rda")
 stopCluster(cl)
 ```
 
+### Model Results
 
 ```{r svmPolyMetrics}
 predictions   = predict(svmOut, newdata = Xtest)
@@ -75,14 +86,16 @@ mae  = mean(abs(predictions - actual_values))
 ss_residual = sum((actual_values - predictions)^2)
 ss_total    = sum((actual_values - mean(actual_values))^2)
 r_squared   = 1 - (ss_residual / ss_total)
+```
 
+```{r, echo=FALSE}
 cat("Mean Squared Error (MSE):", mse, "\n")
 cat("Root Mean Squared Error (RMSE):", rmse, "\n")
 cat("Mean Absolute Error (MAE):", mae, "\n")
 cat("R-squared (R²):", r_squared, "\n")
 ```
 
-
+### Variable Importance
 
 ```{r svmPolyVarImp}
 PolyVarImp = varImp(svmOut)
@@ -98,7 +111,11 @@ ggplot(data = data.frame(Variable = varNames, Importance = importanceScores),
        x = "Importance", y = "Variable") +
   theme_minimal()+
   theme(text = element_text(size=12))
+```
 
+### Residual Plots
+
+```{r residualPlots, message=FALSE}
 polyPredictions = data.frame(Actual = actual_values, 
                              Predicted = predictions,
                              residuals=(actual_values - predictions) / sd(predictions))
@@ -131,6 +148,7 @@ ggplot(polyPredictions, aes(x = Actual, y = Predicted)) +
 
 ```
 
+# Partial Plots
 
 ```{r  partialPlots}
 CompNonEng = partial(svmOut, 
@@ -186,8 +204,4 @@ autoplot(ChilProNonEng,contour=FALSE,legend.title="Library Visits", pdp.color=al
         axis.title = element_text(size=15))
 
 ```
-
-
-
-
 

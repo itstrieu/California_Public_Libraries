@@ -2,7 +2,7 @@ Data Pre-Processing
 ================
 Kathy Trieu
 
-12/2023
+Fall 2023
 
 ### R Setup
 
