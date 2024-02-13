@@ -1,7 +1,5 @@
 # Analysis of California Public Libraries
 
-Welcome to [California Public Libraries]! 
-
 This repository contains the following markdown files:
 
 1. [Combine Data Files](https://github.com/itstrieu/R_Projects/blob/main/California_Public_Libraries/00_CPL_Combine_Data_Files.md) - CPL uploads a different file for every year. They needed to be combined.
