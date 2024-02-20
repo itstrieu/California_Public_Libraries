@@ -5,6 +5,7 @@ This repository contains the following...
 Presentation Files: 
 1. [Project Report](https://github.com/itstrieu/R_Projects/blob/main/California_Public_Libraries/Project%20Report.pdf)
 2. [Presentation Slides](https://github.com/itstrieu/R_Projects/blob/main/California_Public_Libraries/Presentation%20Slides.pdf)
+3. [Shiny App](https://itstrieu.shinyapps.io/California_Public_Libraries/)
 
 Markdown Files:
 
