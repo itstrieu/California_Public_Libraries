@@ -6,7 +6,7 @@ Presentation Files:
 1. [Project Report](https://github.com/itstrieu/California_Public_Libraries/blob/main/Project%20Report.pdf)
 2. [Presentation Slides](https://github.com/itstrieu/California_Public_Libraries/blob/main/Presentation%20Slides.pdf)
 3. [Shiny App](https://itstrieu.shinyapps.io/California_Public_Libraries/)
-4. [Shiny App Code] (https://github.com/itstrieu/California_Public_Libraries/blob/main/CPL_Shiny_App.R)
+4. [Shiny App Code](https://github.com/itstrieu/California_Public_Libraries/blob/main/CPL_Shiny_App.R)
 
 Markdown Files:
 
