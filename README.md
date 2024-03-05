@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-# California_Public_Libraries
-=======
 # Analysis of California Public Libraries
 
 This repository contains the following... 
@@ -21,4 +18,3 @@ Markdown Files:
 ## Description
 
 This project utilizes California Public Libraries Statistics to examine the correlation between library services and attendance/program engagement. By employing a multiple regression model, it reveals the impact of resources and services on community engagement, providing actionable insights for enhanced resource allocation and service improvement to benefit local communities.
->>>>>>> main-branch
