@@ -10,7 +10,7 @@ Presentation Files:
 
 Markdown Files:
 
-1. [Combine Data Files](https://github.com/itstrieu/California_Public_Libraries/blob/main/00_CPL_Combine_Data_Files.md) - CPL uploads a different file for every year. They needed to be combined.
+1. [Combine Data Files](https://github.com/itstrieu/California_Public_Libraries/blob/main/00_CPL_Combine_Data_Files.md)
 2. [Data Pre-Processing](https://github.com/itstrieu/California_Public_Libraries/blob/main/01_CPL_Data_PreProcessing.md)
 3. [Feature Selection and EDA](https://github.com/itstrieu/California_Public_Libraries/blob/main/02_CPL_Feature_Selection.md)
 4. [Random Forests Model](https://github.com/itstrieu/California_Public_Libraries/blob/main/03_CPL_Random_Forests.md) 
