@@ -1,5 +1,7 @@
 # Analysis of California Public Libraries
 
+*tidyverse, doParallel, caret, randomForest, pdp, glmnet*
+
 This repository contains the following... 
 
 Presentation Files: 
