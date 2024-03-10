@@ -16,7 +16,7 @@ Markdown Files:
 2. [Data Pre-Processing](https://github.com/itstrieu/California_Public_Libraries/blob/main/01_CPL_Data_PreProcessing.md)
 3. [Feature Selection and EDA](https://github.com/itstrieu/California_Public_Libraries/blob/main/02_CPL_Feature_Selection.md)
 4. [Random Forests Model](https://github.com/itstrieu/California_Public_Libraries/blob/main/03_CPL_Random_Forests.md) 
-5. [Support Vector Regression Model](https://github.com/itstrieu/California_Public_Libraries/blob/main/04_Support_Vector_Machine_Regression.md) 
+5. [Support Vector Machine Regression Model](https://github.com/itstrieu/California_Public_Libraries/blob/main/04_Support_Vector_Machine_Regression.md) 
 
 ## General Description
 
