@@ -29,11 +29,11 @@ My analysis focused on California libraries, categorized by community size. Leve
 
 ## Descriptive Analytics
 
-From 2016 to 2020, library visits dipped, rebounding post-pandemic but falling short of pre-crisis levels. Despite size differences, average visits per person hovered around 3 yearly. Small libraries showed resilience in program attendance.
+From 2016 to 2020, library visits dipped, rebounding post-pandemic but falling short of pre-crisis levels. Despite size differences, average visits per person hovered around 3 yearly. Small libraries showed greater resilience in program attendance.
 
 ## Model Building
 
-Employing Support Vector Machine Regression (SVMR) and Random Forest models, I probed predictors of library visits. Both models spotlighted the importance of factors like computer usage, non-English materials circulation, and adult programs.
+Employing Support Vector Machine Regression (SVMR) and Random Forest models, I probed predictors of library visits. Both models spotlighted the importance of computer usage, non-English materials circulation, and adult programs.
 
 ## Model Analysis
 
@@ -41,4 +41,4 @@ While SVMR excelled in prediction accuracy, Random Forest captured more visitati
 
 ## Conclusion
 
-This research arms librarians with tools to predict and grasp library visitation dynamics. Key findings suggest prioritizing computer usage, non-English materials circulation, and adult programming. Integrating demographic data in future research is advised for a deeper understanding.
+This research arms librarians with tools to predict and grasp library visitation dynamics. Key findings suggest prioritizing experimentation with computer usage, non-English materials circulation, and adult programming. Integrating demographic data in future research is advised for a deeper understanding.
