@@ -18,12 +18,20 @@ Markdown Files:
 4. [Random Forests Model](https://github.com/itstrieu/California_Public_Libraries/blob/main/03_CPL_Random_Forests.md) 
 5. [Support Vector Machine Regression Model](https://github.com/itstrieu/California_Public_Libraries/blob/main/04_Support_Vector_Machine_Regression.md) 
 
-## General Description
+Background:
+Libraries are community lifelines, but challenges like declining visits and the COVID-19 pandemic threaten their vitality. Drawing on sociologist Eric Klinenberg's insights, I delved into California libraries' data to uncover trends and solutions.
 
-This project utilizes California Public Libraries Statistics to examine the relationships between library services and attendance/program engagement. By employing a multiple regression model, it reveals the impact of resources and services on community engagement, providing actionable insights for enhanced resource allocation and service improvement to benefit local communities.
+Data Description:
+My analysis focused on California libraries, categorized by community size. Leveraging publicly available data, I scrutinized metrics like library visits, computer usage, and program attendance.
 
-## Technical Description
+Descriptive Analytics:
+From 2016 to 2020, library visits dipped, rebounding post-pandemic but falling short of pre-crisis levels. Despite size differences, average visits per person hovered around 3 yearly. Small libraries showed resilience in program attendance.
 
-The project utilized a combination of Support Vector Machine Regression (SVMR) and Random Forest models to analyze library metrics and predict visitation patterns. The SVMR model constructs hyperplanes to capture data trends, while the Random Forest model aggregates results from decision trees to provide detailed insights. Data cleansing involved removing observations missing supervisor records and imputing missing values. The models addressed challenges such as high skewness in data distribution and erroneous database entries. Metrics such as Mean Squared Error (MSE), Root Mean Squared Error (RMSE), and Mean Absolute Error (MAE) were used to evaluate model performance. While the SVMR model demonstrated superior prediction quality with lower error rates, the Random Forest model captured more variation in library visits. Partial dependence plots were generated to examine relationships between variables, revealing nuanced insights. 
+Model Building:
+Employing Support Vector Machine Regression (SVMR) and Random Forest models, I probed predictors of library visits. Both models spotlighted the importance of factors like computer usage, non-English materials circulation, and adult programs.
 
-The models aid librarians by identifying key characteristics with significant influence on library visits. However, they do not establish specific correlative or causal relationships. Instead, they provide a starting point for experimentation, empowering librarians to optimize resource allocation and programming based on informed insights. The feature importance plots highlight variables of interest, guiding librarians in exploring adjustments to enhance community engagement and visitation patterns.
+Model Analysis:
+While SVMR excelled in prediction accuracy, Random Forest captured more visitation variation. Insights gleaned include adjusting performance metrics and resource allocation strategies.
+
+Conclusion:
+This research arms librarians with tools to predict and grasp library visitation dynamics. Key findings suggest prioritizing computer usage, non-English materials circulation, and adult programming. Integrating demographic data in future research is advised for a deeper understanding.
