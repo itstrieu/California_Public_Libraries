@@ -27,6 +27,8 @@ Libraries are community lifelines, but challenges like declining visits and the 
 
 My analysis focused on California libraries, categorized by community size. Leveraging publicly available data, I scrutinized metrics like library visits, computer usage, and program attendance.
 
+![image](https://github.com/itstrieu/California_Public_Libraries/assets/38932563/7415df9f-5cec-4e86-8b74-ae172d6fb4d6)
+
 ## Descriptive Analytics
 
 From 2016 to 2020, library visits dipped, rebounding post-pandemic but falling short of pre-crisis levels. Despite size differences, average visits per person hovered around 3 yearly. Small libraries showed greater resilience in program attendance.
