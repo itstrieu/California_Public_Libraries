@@ -23,6 +23,12 @@ This repository contains the following...
 
 Libraries are community lifelines, but challenges like declining visits and the COVID-19 pandemic threaten their vitality. Drawing on sociologist Eric Klinenberg's insights, I delved into California libraries' data to uncover trends and solutions.
 
+<p align="right"> 
+  <a href="https://www.ericklinenberg.com/books#palaces-for-the-people-how-social-infrastructure-can-help-fight-inequality-polarization-and-the-decline-of-civic-life">
+    <img width="100" src="https://github.com/itstrieu/California_Public_Libraries/assets/38932563/57b71c17-686d-4d6a-bbaa-ce583d87f97b">
+  </a>
+</p>
+
 ## Data Description
 
 My analysis focused on California libraries, categorized by community size. Leveraging publicly available data, I scrutinized metrics like library visits, computer usage, and program attendance.
