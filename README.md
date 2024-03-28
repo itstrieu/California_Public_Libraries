@@ -27,7 +27,10 @@ Libraries are community lifelines, but challenges like declining visits and the 
 
 My analysis focused on California libraries, categorized by community size. Leveraging publicly available data, I scrutinized metrics like library visits, computer usage, and program attendance.
 
-![image](https://github.com/itstrieu/California_Public_Libraries/assets/38932563/7415df9f-5cec-4e86-8b74-ae172d6fb4d6)
+<p align="center"> 
+  <img width="420" height="300" src="https://github.com/itstrieu/California_Public_Libraries/assets/38932563/0efae744-0cc1-451b-811a-8ea8f19d3b14">
+  <img width="420" height="300" src="https://github.com/itstrieu/California_Public_Libraries/assets/38932563/7415df9f-5cec-4e86-8b74-ae172d6fb4d6">
+</p>
 
 ## Descriptive Analytics
 
@@ -37,9 +40,19 @@ From 2016 to 2020, library visits dipped, rebounding post-pandemic but falling s
 
 Employing Support Vector Machine Regression (SVMR) and Random Forest models, I probed predictors of library visits. Both models spotlighted the importance of computer usage, non-English materials circulation, and adult programs.
 
+<p align="center">
+  <img width="500" height="375" src="https://github.com/itstrieu/California_Public_Libraries/assets/38932563/c5e3a4f0-899f-466c-932b-19a6b7fa749a">
+  <img width="500" height="375" src="https://github.com/itstrieu/California_Public_Libraries/assets/38932563/7c65bb8c-c662-4eaa-a7c4-52eb0f5227fa">
+</p>
+
 ## Model Analysis
 
 While SVMR excelled in prediction accuracy, Random Forest captured more visitation variation. Insights gleaned include adjusting performance metrics and resource allocation strategies.
+
+<p align="center"> 
+  <img width="500" height="375" src="https://github.com/itstrieu/California_Public_Libraries/assets/38932563/0ca06871-b19e-4cd1-ba83-57d31143f5c6">
+  <img width="500" height="375" src="https://github.com/itstrieu/California_Public_Libraries/assets/38932563/2e388b7c-f466-4537-b1a9-97a4d8b66028">
+</p>
 
 ## Conclusion
 
