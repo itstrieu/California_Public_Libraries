@@ -51,33 +51,43 @@ names(df) = names(df) %>%
 
 #### that are the same but named differently
 
-The primary challenge I encountered was that while the library collected data of the same type according to their definition, they did not maintain consistent naming conventions. For instance, all references were to the total number of electronic books in the collection, yet the feature names varied, such as "NumofElectronicBooks," "NumofElectronicBooksinCollection," and "TotalElectronicBooks."
+
+The primary challenge I encountered at this step was that while the library collected data of the same type according to their definition, they did not maintain consistent naming conventions. For instance, all references were to the total number of electronic books in the collection, yet the feature names varied, such as "NumofElectronicBooks," "NumofElectronicBooksinCollection," and "TotalElectronicBooks."
 
 To address this inconsistency, I consolidated the columns using "unite."
 
 ``` r
 df = df %>%
-  unite("NumofElectronicBooks",c("NumofElectronicBooks","NumofElectronicBooksinCollection","TotalElectronicBooks")
+  unite("NumofElectronicBooks",c("NumofElectronicBooks",
+        "NumofElectronicBooksinCollection","TotalElectronicBooks")
         ,na.rm=TRUE,sep="/",remove=TRUE) %>%
-  unite("NumofElectronicCollections", c("NumofElectronicCollections","NumofElectronicCollectionsinCollection")
+  unite("NumofElectronicCollections", c("NumofElectronicCollections",
+        "NumofElectronicCollectionsinCollection")
         ,na.rm=TRUE,sep="/",remove=TRUE) %>%
-  unite("NumofChildrensPrograms", c("NumofChildrensPrograms","NumofChildrensProgramscalculated","ofChildrensProgramscalculated")
+  unite("NumofChildrensPrograms", c("NumofChildrensPrograms",
+        "NumofChildrensProgramscalculated","ofChildrensProgramscalculated")
         ,na.rm=TRUE,sep="/",remove=TRUE) %>%
-  unite("TotalProgramAttendance", c("TotalProgramAttendance", "ProgramAttendance")
+  unite("TotalProgramAttendance", c("TotalProgramAttendance",
+        "ProgramAttendance")
         ,na.rm=TRUE,sep="/",remove=TRUE) %>%
   unite("NumofOutlets", c("NumofOutlets","TotalofOutlets")
         ,na.rm=TRUE,sep="/",remove=TRUE)
 
 df = df %>%
-  unite("NumofPhysicalAudioMaterials", c("NumofPhysicalAudioMaterials","NumofPhysicalAudioMaterialsinCollection")
+  unite("NumofPhysicalAudioMaterials", c("NumofPhysicalAudioMaterials",
+        "NumofPhysicalAudioMaterialsinCollection")
         ,na.rm=TRUE,sep="/",remove=TRUE) %>%
-  unite("NumofPhysicalVideoMaterials", c("NumofPhysicalVideoMaterials","NumofPhysicalVideoMaterialsinCollection")
+  unite("NumofPhysicalVideoMaterials", c("NumofPhysicalVideoMaterials",
+        "NumofPhysicalVideoMaterialsinCollection")
         ,na.rm=TRUE,sep="/",remove=TRUE) %>%
-  unite("NumofDownloadableAudioMaterials", c("NumofDownloadableAudioMaterials","NumofDownloadableAudioMaterialsinCollection")
+  unite("NumofDownloadableAudioMaterials", c("NumofDownloadableAudioMaterials",
+        "NumofDownloadableAudioMaterialsinCollection")
         ,na.rm=TRUE,sep="/",remove=TRUE) %>%
-    unite("NumofDownloadableVideoMaterials", c("NumofDownloadableVideoMaterials","NumofDownloadableVideoMaterialsinCollection")
+    unite("NumofDownloadableVideoMaterials", c("NumofDownloadableVideoMaterials",
+          "NumofDownloadableVideoMaterialsinCollection")
           ,na.rm=TRUE,sep="/",remove=TRUE) %>%
-  unite("Doyouchargelatefines", c("Doyouchargelatefines","Doyouchargeanypatronslatefinesforphysicalmaterials")
+  unite("Doyouchargelatefines", c("Doyouchargelatefines",
+        "Doyouchargeanypatronslatefinesforphysicalmaterials")
         ,na.rm=TRUE,sep="/",remove=TRUE)
 
 naCountAfter = sort(colSums(is.na(df))) %>% as.data.frame(.)
@@ -125,9 +135,11 @@ dfFixedTypes = df %>%
                    contains("Expenditures") |
                    contains("Income")
                    ), ~gsub("\\,", "", .))) %>%
-  mutate(across((contains("Expenditures") | contains("Income")), ~gsub("\\$", "", .))) %>%
+  mutate(across((contains("Expenditures") | contains("Income")), 
+                    ~gsub("\\$", "", .))) %>%
   mutate(CIPACompliant = ifelse(CIPACompliant == "No",0,1)) %>%
-  apply(.,2, function(x) str_replace_all(string=x, pattern=" ", repl="")) %>% as.data.frame(.)
+  apply(.,2, function(x) str_replace_all(string=x, pattern=" ", repl="")) %>% 
+    as.data.frame(.)
 
 locationID = dfFixedTypes$Location
 year       = dfFixedTypes$FiscalYear
@@ -140,14 +152,6 @@ dfQuant = dfFixedTypes %>%
          Year = year) %>%
   select(Location, Year, everything())
 ```
-
-    ## Warning in lapply(X = X, FUN = FUN, ...): NAs introduced by coercion
-
-    ## Warning in lapply(X = X, FUN = FUN, ...): NAs introduced by coercion
-
-    ## Warning in lapply(X = X, FUN = FUN, ...): NAs introduced by coercion
-
-    ## Warning in lapply(X = X, FUN = FUN, ...): NAs introduced by coercion
 
 #### Median Imputed Missing Data in Quantitative Features
 
@@ -367,16 +371,22 @@ dfnoOutliers = df %>%
   select(-cluster)
 
 dfRatesWithClassifier = df %>%
-  mutate(Neighborhood = ifelse(findOutlier(df$PopulationofTheLegalServiceArea), "Large", "Small")) %>%
-  mutate(Neighborhood = ifelse((PopulationofTheLegalServiceArea > 3000000), "Extra Large", Neighborhood))
+  mutate(Neighborhood = ifelse(findOutlier(df$PopulationofTheLegalServiceArea), 
+                                "Large", "Small")) %>%
+  mutate(Neighborhood = ifelse((PopulationofTheLegalServiceArea > 3000000), 
+                                "Extra Large", Neighborhood))
 
 dfRatesWithClassifier.LV = dfRatesExceptLibraryVisits %>%
-  mutate(Neighborhood = ifelse(findOutlier(df$PopulationofTheLegalServiceArea), "Large", "Small")) %>%
-  mutate(Neighborhood = ifelse((PopulationofTheLegalServiceArea > 3000000), "Extra Large", Neighborhood))
+  mutate(Neighborhood = ifelse(findOutlier(df$PopulationofTheLegalServiceArea), 
+                                "Large", "Small")) %>%
+  mutate(Neighborhood = ifelse((PopulationofTheLegalServiceArea > 3000000), 
+                                "Extra Large", Neighborhood))
 
 dfNotRatesWithClassifier = dfNotRates %>%
-  mutate(Neighborhood = ifelse(findOutlier(df$PopulationofTheLegalServiceArea), "Large", "Small")) %>%
-  mutate(Neighborhood = ifelse((PopulationofTheLegalServiceArea > 3000000), "Extra Large", Neighborhood))
+  mutate(Neighborhood = ifelse(findOutlier(df$PopulationofTheLegalServiceArea), 
+                                "Large", "Small")) %>%
+  mutate(Neighborhood = ifelse((PopulationofTheLegalServiceArea > 3000000), 
+                                "Extra Large", Neighborhood))
 
 ProgramAttendancePerProgram = dfRatesWithClassifier %>%
   select(PopulationofTheLegalServiceArea, Neighborhood, contains("AttendancePerProgram")) %>%
@@ -386,7 +396,8 @@ ProgramAttendancePerProgram = dfRatesWithClassifier %>%
          "Young Adults" = YoungAdultProgramAttendancePerProgram) %>%
   gather(key = "AgeGroup", value = "Attendance", 
          "Adults", "Young Adults", "Children") %>%
-  select(-AdultProgramAttendancePerProgram,-ChildrenProgramAttendancePerProgram,-YoungAdultProgramAttendancePerProgram)
+  select(-AdultProgramAttendancePerProgram,-ChildrenProgramAttendancePerProgram,
+         -YoungAdultProgramAttendancePerProgram)
 
 dfNotRates_NoOutliers = dfNotRates %>%
   filter(!findOutlier(df$PopulationofTheLegalServiceArea)==TRUE)
@@ -449,7 +460,8 @@ ggplot(totalLibraryVisits) +
   geom_col(aes(x=Year, y=TotalLibraryVisits/1000000, fill=Neighborhood),position="dodge") +
   scale_fill_manual(values = threeColors) +  # Set fill colors manually
   labs(title = "Visits to All Libraries",
-       x = "Year", y = "Total Library Visits (millions)") +
+       x = "Year", 
+       y = "Total Library Visits (millions)") +
   theme_minimal()
 ```
 
@@ -460,18 +472,19 @@ ggplot(totalProgramAttendance) +
   geom_col(aes(x=Year, y=TotalProgramAttendance/1000000, fill=Neighborhood),position="dodge") +
   scale_fill_manual(values = threeColors) +  # Set fill colors manually
   labs(title = "Total Program Attendance",
-       x = "Year", y = "TotalProgramAttendance/ (millions)") +
+       x = "Year", 
+       y = "TotalProgramAttendance/ (millions)") +
   theme_minimal()
 ```
 
-![](02_CPL_Feature_Selection_files/figure-gfm/EDAplots-4.png)<!-- -->
-
 ``` r
 ggplot(dfRatesWithClassifier.LV) +
-  geom_point(aes(x=PopulationofTheLegalServiceArea/1000000, y=LibraryVisits/1000000, color=Neighborhood),position="jitter") +
+  geom_point(aes(x=PopulationofTheLegalServiceArea/1000000, y=LibraryVisits/1000000, color=Neighborhood),
+                position="jitter") +
   scale_color_manual(values = threeColors) +  # Set fill colors manually
   labs(title = "Library Visits and Population Size",
-       x = "Population of the Legal Service Area (millions)", y = "Library Visits (millions)") +
+       x = "Population of the Legal Service Area (millions)", 
+       y = "Library Visits (millions)") +
   theme_minimal()
 ```
 
@@ -482,11 +495,10 @@ ggplot(dfRatesWithClassifier%>%filter(Neighborhood=="Small")) +
   geom_point(aes(x=PopulationofTheLegalServiceArea/1000, y=TotalProgramAttendancePerProgram),
              position="dodge", color="#F2AD00") +
   labs(title = "Average Attendance Per Program",
-       x = "Population of the Legal Service Area (thousands)", y = "Average Attendance Per Program") +
+       x = "Population of the Legal Service Area (thousands)", 
+       y = "Average Attendance Per Program") +
   theme_minimal()
 ```
-
-![](02_CPL_Feature_Selection_files/figure-gfm/EDAplots-6.png)<!-- -->
 
 ``` r
 ggplot(ProgramAttendancePerProgram%>%filter(Neighborhood=="Small")) +
@@ -494,11 +506,10 @@ ggplot(ProgramAttendancePerProgram%>%filter(Neighborhood=="Small")) +
              position="jitter") +
   scale_color_manual(values = threeColors) +
   labs(title = "Average Attendance Per Program",
-       x = "Population of the Legal Service Area (thousands)", y = "Average Attendance Per Program") +
+       x = "Population of the Legal Service Area (thousands)", 
+       y = "Average Attendance Per Program") +
   theme_minimal()
 ```
-
-![](02_CPL_Feature_Selection_files/figure-gfm/EDAplots-7.png)<!-- -->
 
 ``` r
 ggplot(ProgramAttendancePerProgram %>% filter(Neighborhood == "Small")) +
@@ -511,11 +522,10 @@ ggplot(ProgramAttendancePerProgram %>% filter(Neighborhood == "Small")) +
   guides(color = "none")
 ```
 
-![](02_CPL_Feature_Selection_files/figure-gfm/EDAplots-8.png)<!-- -->
-
 ``` r
 ggplot(dfRatesWithClassifier.LV) +
-  geom_point(aes(x=LibraryVisits/1000000, y=AnnualUsesofPublicInternetComputers, color=Neighborhood),
+  geom_point(aes(x=LibraryVisits/1000000, y=AnnualUsesofPublicInternetComputers, 
+              color=Neighborhood),
              position="jitter") +
   scale_color_manual(values = threeColors) +
   labs(title = "Computer Use Per Person and Library Visits",
@@ -523,73 +533,27 @@ ggplot(dfRatesWithClassifier.LV) +
   theme_minimal()
 ```
 
-![](02_CPL_Feature_Selection_files/figure-gfm/EDAplots-9.png)<!-- -->
-
 ``` r
 ggplot(dfRatesWithClassifier.LV %>% filter(Neighborhood == "Small")) +
-  geom_point(aes(x=LibraryVisits/1000000, y=AnnualUsesofPublicInternetComputers, color=Neighborhood),
+  geom_point(aes(x=LibraryVisits/1000000, y=AnnualUsesofPublicInternetComputers, 
+              color=Neighborhood),
              position="jitter", color="#F2AD00") +
   labs(title = "Computer Use Per Person and Library Visits",
-       x = "Library Visits (millions)", y = "Annual Uses of Public Computers Per Person") +
+       x = "Library Visits (millions)", 
+       y = "Annual Uses of Public Computers Per Person") +
   theme_minimal()
 ```
-
-![](02_CPL_Feature_Selection_files/figure-gfm/EDAplots-10.png)<!-- -->
 
 ``` r
 ggplot(dfRatesWithClassifier.LV %>% filter(Neighborhood == "Extra Large")) +
-  geom_point(aes(x=LibraryVisits/1000000, y=AnnualUsesofPublicInternetComputers, color=Neighborhood),
+  geom_point(aes(x=LibraryVisits/1000000, y=AnnualUsesofPublicInternetComputers, 
+              color=Neighborhood),
              position="jitter", color=oneColor) +
   labs(title = "Computer Use Per Person and Library Visits",
-       x = "Library Visits (millions)", y = "Annual Uses of Public Computers Per Person") +
+       x = "Library Visits (millions)", 
+       y = "Annual Uses of Public Computers Per Person") +
   theme_minimal()
 ```
-
-![](02_CPL_Feature_Selection_files/figure-gfm/EDAplots-11.png)<!-- -->
-
-``` r
-ggplot(dfRatesWithClassifier.LV %>% filter(Neighborhood == "Large")) +
-  geom_point(aes(x=LibraryVisits/1000000, y=AnnualUsesofPublicInternetComputers, color=Neighborhood),
-             position="jitter", color="#00A08A") +
-  labs(title = "Computer Use Per Person and Library Visits",
-       x = "Library Visits (millions)", y = "Annual Uses of Public Computers Per Person") +
-  theme_minimal()
-```
-
-![](02_CPL_Feature_Selection_files/figure-gfm/EDAplots-12.png)<!-- -->
-
-``` r
-ggplot(dfNotRatesWithClassifier %>% filter(Neighborhood == "Small")) +
-  geom_point(aes(y=PopulationofTheLegalServiceArea/1000000, x=NumofElectronicCollections, color=Neighborhood),
-             position="jitter", color="#F2AD00") +
-  labs(title = "Electronic Collections Per Person and Library Visits",
-       x = "Population of the Legal Service Area (millions)", y = "Electronic Collections Per Person") +
-  theme_minimal()
-```
-
-![](02_CPL_Feature_Selection_files/figure-gfm/EDAplots-13.png)<!-- -->
-
-``` r
-ggplot(dfRatesWithClassifier.LV %>% filter(Neighborhood == "Extra Large")) +
-  geom_point(aes(x=LibraryVisits/1000000, y=NumofElectronicCollections, color=Neighborhood),
-             position="jitter", color=oneColor) +
-  labs(title = "Electronic Collections Per Person and Library Visits",
-       x = "Library Visits (millions)", y = "Electronic Collections Per Person") +
-  theme_minimal()
-```
-
-![](02_CPL_Feature_Selection_files/figure-gfm/EDAplots-14.png)<!-- -->
-
-``` r
-ggplot(dfRatesWithClassifier.LV %>% filter(Neighborhood == "Large")) +
-  geom_point(aes(x=LibraryVisits/1000000, y=NumofElectronicCollections, color=Neighborhood),
-             position="jitter", color="#00A08A") +
-  labs(title = "Electronic Collections Per Person and Library Visits",
-       x = "Library Visits (millions)", y = "Electronic Collections Per Person") +
-  theme_minimal()
-```
-
-![](02_CPL_Feature_Selection_files/figure-gfm/EDAplots-15.png)<!-- -->
 
 #### Box Plots
 
@@ -598,12 +562,11 @@ ggplot(dfRatesWithClassifier.LV %>% filter(Neighborhood == "Small")) +
   geom_boxplot(aes(y=AnnualUsesofPublicInternetComputers, color=Neighborhood),
                color="#F2AD00") +
   labs(title = "Computer Use Per Person and Library Visits",
-       x = "Library Visits (millions)", y = "Annual Uses of Public Computers Per Person") +
+       x = "Library Visits (millions)", 
+       y = "Annual Uses of Public Computers Per Person") +
   theme_minimal() +
   coord_cartesian(ylim=c(0,1))
 ```
-
-![](02_CPL_Feature_Selection_files/figure-gfm/moreBoxPlots-1.png)<!-- -->
 
 ``` r
 ggplot(ProgramAttendancePerProgram) +
@@ -643,8 +606,6 @@ ggplot(ProgramAttendancePerProgram %>% filter(AgeGroup == "Adults")) +
   guides(color = "none")
 ```
 
-![](02_CPL_Feature_Selection_files/figure-gfm/moreBoxPlots-4.png)<!-- -->
-
 ``` r
 ggplot(ProgramAttendancePerProgram %>% filter(AgeGroup == "Adults")) +
   geom_boxplot(aes(x = Neighborhood, y = Attendance, color = Neighborhood)) +
@@ -657,8 +618,6 @@ ggplot(ProgramAttendancePerProgram %>% filter(AgeGroup == "Adults")) +
   coord_cartesian(ylim=c(0,50))
 ```
 
-![](02_CPL_Feature_Selection_files/figure-gfm/moreBoxPlots-5.png)<!-- -->
-
 ``` r
 ggplot(ProgramAttendancePerProgram %>% filter(AgeGroup == "Young Adults")) +
   geom_boxplot(aes(x = Neighborhood, y = Attendance, color = Neighborhood)) +
@@ -670,21 +629,18 @@ ggplot(ProgramAttendancePerProgram %>% filter(AgeGroup == "Young Adults")) +
   guides(color = "none")
 ```
 
-![](02_CPL_Feature_Selection_files/figure-gfm/moreBoxPlots-6.png)<!-- -->
-
 ``` r
 ggplot(ProgramAttendancePerProgram %>% filter(AgeGroup == "Young Adults")) +
   geom_boxplot(aes(x = Neighborhood, y = Attendance, color = Neighborhood)) +
   scale_color_manual(values = threeColors) +
-  labs(title = "Average Attendance Per Young Adult Program (Zoomed Into the Median)",
+  labs(title = "Average Attendance Per Young Adult Program 
+                  (Zoomed Into the Median)",
        x = "Age Group",
        y = "Average Attendance Per Program") +
   theme_minimal() +
   guides(color = "none") +
   coord_cartesian(ylim=c(0,50))
 ```
-
-![](02_CPL_Feature_Selection_files/figure-gfm/moreBoxPlots-7.png)<!-- -->
 
 ``` r
 ggplot(ProgramAttendancePerProgram %>% filter(AgeGroup == "Children")) +
@@ -696,8 +652,6 @@ ggplot(ProgramAttendancePerProgram %>% filter(AgeGroup == "Children")) +
   theme_minimal() +
   guides(color = "none")
 ```
-
-![](02_CPL_Feature_Selection_files/figure-gfm/moreBoxPlots-8.png)<!-- -->
 
 ``` r
 ggplot(ProgramAttendancePerProgram %>% filter(AgeGroup == "Children")) +
@@ -711,35 +665,6 @@ ggplot(ProgramAttendancePerProgram %>% filter(AgeGroup == "Children")) +
   coord_cartesian(ylim=c(0,50))
 ```
 
-![](02_CPL_Feature_Selection_files/figure-gfm/moreBoxPlots-9.png)<!-- -->
-
-``` r
-ggplot(ProgramAttendancePerProgram %>% filter(Neighborhood == "Extra Large")) +
-  geom_boxplot(aes(x = AgeGroup, y = Attendance, color = AgeGroup)) +
-  scale_color_manual(values = threeColors) +
-  labs(title = "Average Attendance in Extra Large Libraries Per Program",
-       x = "Neighborhood",
-       y = "Average Attendance Per Program") +
-  theme_minimal() +
-  guides(color = "none")
-```
-
-![](02_CPL_Feature_Selection_files/figure-gfm/moreBoxPlots-10.png)<!-- -->
-
-``` r
-ggplot(ProgramAttendancePerProgram %>% filter(AgeGroup == "Children")) +
-  geom_boxplot(aes(x = Neighborhood, y = Attendance, color = Neighborhood)) +
-  scale_color_manual(values = threeColors) +
-  labs(title = "Average Attendance in Extra Large Libraries Per Program (Zoomed Into the Median)",
-       x = "Age Group",
-       y = "Average Attendance Per Program") +
-  theme_minimal() +
-  guides(color = "none") +
-  coord_cartesian(ylim=c(0,50))
-```
-
-![](02_CPL_Feature_Selection_files/figure-gfm/moreBoxPlots-11.png)<!-- -->
-
 ### Remove highly correlated features and save data
 
 ``` r
@@ -748,7 +673,8 @@ y = dfnoOutliers$LibraryVisits
 dfNoOutliersNoVisits = dfnoOutliers %>%
   select(-LibraryVisits)
 
-(highCorr = caret::findCorrelation(cor(dfNoOutliersNoVisits[-c(1:2)]), .7, verbose=TRUE, names = TRUE))
+(highCorr = caret::findCorrelation(cor(dfNoOutliersNoVisits[-c(1:2)]), 
+                                    .7, verbose=TRUE, names = TRUE))
 ```
 
     ## Compare row 28  and column  30 with corr  0.991 
@@ -852,7 +778,8 @@ corrplot::corrplot(cor(X[-c(1:2)]),tl.cex=.5)
 
 ``` r
 dfLibraryVisitsSupervisor = cbind(X,y)
-write.csv(dfLibraryVisitsSupervisor, file = "data/CPL_Ready_For_Model.csv", row.names = FALSE)
+write.csv(dfLibraryVisitsSupervisor, file = "data/CPL_Ready_For_Model.csv", 
+            row.names = FALSE)
 
 ```
 
@@ -935,7 +862,8 @@ ggplot(rfPredictions, aes(x = Actual, y = Predicted)) +
 ### Variable Importance
 
 ``` r
-importance       = varImp(rfModel)$importance %>% arrange(desc(Overall)) %>% head(20)
+importance       = varImp(rfModel)$importance %>% arrange(desc(Overall)) %>% 
+                    head(20)
 varNames         = rownames(importance)
 importanceScores = importance[, 1]
 
@@ -961,24 +889,22 @@ plot(partialPlot, main = "Partial Dependence Plot: Reference Questions")
 
 ``` r
 partialPlot = partial(rfModel, pred.var = "AnnualUsesofPublicInternetComputers")
-plot(partialPlot, main = "Partial Dependence Plot:Annual Uses of Public Internet Computers")
+plot(partialPlot, 
+      main = "Partial Dependence Plot:Annual Uses of Public Internet Computers")
 ```
 
-![](03_CPL_Random_Forests_files/figure-gfm/partialPlots-2.png)<!-- -->
 
 ``` r
 partialPlot = partial(rfModel, pred.var = "PopulationofTheLegalServiceArea")
 plot(partialPlot, main = "Partial Dependence Plot: Population")
 ```
 
-![](03_CPL_Random_Forests_files/figure-gfm/partialPlots-3.png)<!-- -->
 
 ``` r
 partialPlot = partial(rfModel, pred.var = "AdultProgramAttendance")
 plot(partialPlot, main = "Partial Dependence Plot: Adult Program Attendance")
 ```
 
-![](03_CPL_Random_Forests_files/figure-gfm/partialPlots-4.png)<!-- -->
 
 ### Residual Plots
 
@@ -1050,9 +976,11 @@ cl        = makeCluster(num_cores)
 registerDoParallel(cl)
 
 df       = cbind(Xtrain,Ytrain)
-tuneGrid = expand.grid(C = c(0.1, 1, 10, 100),scale = c(0.1, 1, 10),degree = c(2,3)) 
+tuneGrid = expand.grid(C = c(0.1, 1, 10, 100),scale = c(0.1, 1, 10),
+                        degree = c(2,3)) 
 ctrl     = trainControl(method = "cv", number = 5, allowParallel = TRUE)
-# svmOut   = train(Ytrain ~ .,data = df,method = "svmPoly", trControl = ctrl,tuneGrid = tuneGrid)
+# svmOut   = train(Ytrain ~ .,data = df,method = "svmPoly", 
+                    trControl = ctrl,tuneGrid = tuneGrid)
 # Model was saved.
 
 svmOut = readRDS("Output/svmModel.rda")
@@ -1108,7 +1036,7 @@ ggplot(data = data.frame(Variable = varNames, Importance = importanceScores),
 ``` r
 polyPredictions = data.frame(Actual = actual_values, 
                              Predicted = predictions,
-                             residuals=(actual_values - predictions) / sd(predictions))
+                             residuals=(actual_values - predictions)/sd(predictions))
 
 ggplot(polyPredictions) +
   geom_histogram(aes(x=residuals),fill="#5BBCD6") +
@@ -1151,7 +1079,8 @@ ggplot(polyPredictions, aes(x = Actual, y = Predicted)) +
 
 ``` r
 CompNonEng = partial(svmOut, 
-        pred.var = c("AnnualUsesofPublicInternetComputers", "CirculationofNonEnglishMaterials"),
+        pred.var = c("AnnualUsesofPublicInternetComputers", 
+                      "CirculationofNonEnglishMaterials"),
         pred.func=predict, 
         plot=FALSE)
 
@@ -1166,7 +1095,8 @@ ChilAdult  = partial(svmOut,
         plot=FALSE)
 
 CompAdult   = partial(svmOut, 
-        pred.var = c("AnnualUsesofPublicInternetComputers", "AdultProgramAttendance"),
+        pred.var = c("AnnualUsesofPublicInternetComputers", 
+                    "AdultProgramAttendance"),
         pred.func=predict, 
         plot=FALSE)
 
@@ -1182,7 +1112,8 @@ autoplot(CompAdult,contour=FALSE,legend.title="Library Visits", pdp.color=allCol
 ![](04_Support_Vector_Machine_Regression_files/figure-gfm/partialPlots-1.png)<!-- -->
 
 ``` r
-autoplot(CompNonEng,contour=FALSE,legend.title="Library Visits", pdp.color=allColors) +
+autoplot(CompNonEng,contour=FALSE,legend.title="Library Visits", 
+          pdp.color=allColors) +
   labs(title="Interaction Between Computer Use and Circulation of Non-English Materials",       
        x="Annual Uses of Public Internet Computers",
        y="Circulation of Non-English Materials") +
@@ -1191,10 +1122,9 @@ autoplot(CompNonEng,contour=FALSE,legend.title="Library Visits", pdp.color=allCo
         axis.title = element_text(size=15))
 ```
 
-![](04_Support_Vector_Machine_Regression_files/figure-gfm/partialPlots-2.png)<!-- -->
-
 ``` r
-autoplot(ChilAdult,contour=FALSE,legend.title="Library Visits", pdp.color=allColors) +
+autoplot(ChilAdult,contour=FALSE,legend.title="Library Visits", 
+          pdp.color=allColors) +
   labs(title="Number of Childrens Programs and Adult Program Attendance",       
        x="Number of Children's Programs",
        y="Adult Program Attendance") +
@@ -1203,10 +1133,10 @@ autoplot(ChilAdult,contour=FALSE,legend.title="Library Visits", pdp.color=allCol
         axis.title = element_text(size=15))
 ```
 
-![](04_Support_Vector_Machine_Regression_files/figure-gfm/partialPlots-3.png)<!-- -->
 
 ``` r
-autoplot(ChilProNonEng,contour=FALSE,legend.title="Library Visits", pdp.color=allColors) +
+autoplot(ChilProNonEng,contour=FALSE,legend.title="Library Visits", 
+          pdp.color=allColors) +
   labs(title="Number of Childrens Programs and Circulation of Non-English Materials",       
        x="Number of Children's Programs",
        y="Circulation of Non-English Materials") +
@@ -1215,4 +1145,3 @@ autoplot(ChilProNonEng,contour=FALSE,legend.title="Library Visits", pdp.color=al
         axis.title = element_text(size=15))
 ```
 
-![](04_Support_Vector_Machine_Regression_files/figure-gfm/partialPlots-4.png)<!-- -->
